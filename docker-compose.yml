@@ -1,0 +1,28 @@
+version: '3'
+services:
+  user-service:
+    build:
+      context: ./user-service
+      target: development
+    entrypoint: 'yarn start:dev'
+    ports:
+      - 3001:3001
+    networks:
+      - internal
+    volumes:
+      - ./user-service/:/usr/src/app
+
+  user-service-db:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=1'
+      - 'MYSQL_DATABASE=user_service'
+      - 'MYSQL_USER=user_service'
+      - 'MYSQL_PASSWORD=1'
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
